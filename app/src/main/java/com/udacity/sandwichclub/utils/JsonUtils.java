@@ -32,15 +32,15 @@ public class JsonUtils {
             
             JSONObject sandwichJsonObj = new JSONObject(json);
             JSONObject name = sandwichJsonObj.getJSONObject("name");
-            sandwich.setMainName(name.getString("mainName"));
+            sandwich.setMainName(name.optString("mainName"));
             JSONArray alsoKnownAsArray = name.getJSONArray("alsoKnownAs");
             if (alsoKnownAsArray != null) {
                 List<String> alsoKnownAsList = getJsonArrayAsList(alsoKnownAsArray);
                 sandwich.setAlsoKnownAs(alsoKnownAsList);
             }
-            sandwich.setPlaceOfOrigin(sandwichJsonObj.getString("placeOfOrigin"));
-            sandwich.setDescription(sandwichJsonObj.getString("description"));
-            sandwich.setImage(sandwichJsonObj.getString("image"));
+            sandwich.setPlaceOfOrigin(sandwichJsonObj.optString("placeOfOrigin"));
+            sandwich.setDescription(sandwichJsonObj.optString("description"));
+            sandwich.setImage(sandwichJsonObj.optString("image"));
             JSONArray ingredientsArray = sandwichJsonObj.getJSONArray("ingredients");
             if (ingredientsArray != null) {
                 List<String> ingredientsList = getJsonArrayAsList(ingredientsArray);
@@ -53,10 +53,13 @@ public class JsonUtils {
         return sandwich;
     }
 
+    /**
+     * Construct a list of strings with the values taken from JSON array
+     */
     private static List<String> getJsonArrayAsList(JSONArray array) throws JSONException {
         List<String> list = new ArrayList<>();
         for (int i = 0; i < array.length(); i++) {
-            list.add(array.getString(i));
+            list.add(array.optString(i));
         }
         return list;
     }
